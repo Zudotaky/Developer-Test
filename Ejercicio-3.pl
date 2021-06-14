@@ -8,7 +8,7 @@ my $apikey = "apikey";
 # la query
 my $response = HTTP::Tiny->new->get(
   'http://api.openweathermap.org/data/2.5/weather?q=' . $city . 
-  '&units=metric&sort='. $apikey);
+  '&units=metric&sort=population&appid='. $apikey);
 
 ## error si no encuenta una cuidad con el nombre o codigo
 if($response->{'status'} == 404){
