@@ -1,0 +1,4 @@
+
+Primero testeria algunos cambios de base.
+Luego testearia errores como ingresar cosas invalidas.
+Tambien que tire los errores correctos.
