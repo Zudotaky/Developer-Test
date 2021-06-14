@@ -2,14 +2,13 @@ use strict;
 use warnings;
 use JSON;
 use HTTP::Tiny;
-use Data::Dumper;
 
 my ($city) = @ARGV;
-
+my $apikey = "apikey";
 # la query
 my $response = HTTP::Tiny->new->get(
   'http://api.openweathermap.org/data/2.5/weather?q=' . $city . 
-  '&units=metric&sort=population&appid=c1ca09002908d35b2cdbd9ee19c1a482');
+  '&units=metric&sort='. $apikey);
 
 ## error si no encuenta una cuidad con el nombre o codigo
 if($response->{'status'} == 404){
