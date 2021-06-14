@@ -18,11 +18,11 @@ foreach my $indice (10..24){
 }
 
 
-
+# Funcion del ejercicio 2
 sub conversorDeBases{
 
   my ($baseInicial,$numero,$baseFinal) = @_;
-
+  
   my $resultado = transfomarABase10($baseInicial,$numero);
 
   $resultado = transformarDeBase10($baseFinal,$resultado);
