@@ -28,7 +28,7 @@
 
 **Ejercicio 5:**
 
-	Implementar un script en Perl que tome como eun string con numeros separados por caracteres y retorna el valor en forma de numero
+	Implementar un script en Perl que tome un string con numeros separados por caracteres y retorna el valor en forma de numero
 
 **Ejercicio 6:**
 
