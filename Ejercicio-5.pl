@@ -1,44 +1,66 @@
 use strict;
 use warnings;
-
-my ($anotacion) = @ARGV;
-my @anotacion = split " " , $anotacion;
-# una lista con los operadores posibles
-my $operadores = '+/-x*';
-# auxiliares
-my @auxiliar;
-my $primerNumero;
-my $segundoNumero;
-my $resultado;
+my $numericBase = 10;
+my $maxDecimal = 3;
+my $numerosDe0a9 = join ("" ,(0..9));
+my $sinIndice = "-1";
+my $cantidadCaracteres = 1;
 
 
-foreach my $dato (@anotacion){
-  if(index($operadores,$dato) != -1){
-  # saco los ultimos 2 numeros y los opero
-  # y luego el resultado lo agrego a la lista de numeros
-    $segundoNumero = pop(@auxiliar);
-    $primerNumero = pop(@auxiliar);
-    $resultado = calculate($primerNumero,$segundoNumero,$dato);
-    push(@auxiliar,$resultado);
-  }else{
-  # agrego los numeros en una lista
-    push(@auxiliar,$dato);
+sub toNumber{
+  my ($stringNumber) = @_;
+  my $finalNumber = 0;
+  
+  if (tieneDecimales($stringNumber)){
+    for my $index(1..$maxDecimal){
+      if (esNumero(lastCaracter($stringNumber))){
+        $finalNumber += lastCaracter($stringNumber) * ($numericBase ** -$index);
+        chop $stringNumber;
+      }else{
+        last;
+      }
+    }
   }
+
+  my $stringAux = "";
+  for my $char (split //, $stringNumber){
+    if (esNumero(lastCaracter($char))){
+      $stringAux = $stringAux . $char
+    }
+  }
+  $finalNumber = $stringAux+$finalNumber;
+  print("$finalNumber \n");
+  return $finalNumber
 }
 
-sub calculate{
-  my ($primerNumero,$segundoNumero,$operador) = @_ ;
-  if('+' eq $operador) { return $primerNumero + $segundoNumero };
-  if('-' eq $operador) { return $primerNumero - $segundoNumero };
-  if('x' eq $operador) { return $primerNumero * $segundoNumero };
-  if('*' eq $operador) { return $primerNumero * $segundoNumero };
-  if('/' eq $operador) { return $primerNumero / $segundoNumero };
+sub tieneDecimales{
+  my ($number) = @_;
+  my $decimales = reverse substr($number, -$maxDecimal);
+  my $caracterAcutal= "" ;
+  for my $index (0..$maxDecimal-1){
+    $caracterAcutal = substr($decimales,$index,$cantidadCaracteres) ;
+    if (not esNumero(lastCaracter($caracterAcutal))){
+      return "True"
+    }
+  }
+  return ""
 }
 
-# verifica si solo queda el resultado en la lista auxiliar
-# si no tira un error
-if ( @auxiliar == 1 ){
-  print $auxiliar[0] ."\n";
-}else {
-  print "hubo un error en la anotacion \n"
+sub lastCaracter{
+  my ($string) = @_;
+  substr($string,-1,$cantidadCaracteres)
 }
+
+sub esNumero{
+  my ($numero) = @_;
+  not index($numerosDe0a9,$numero) eq $sinIndice
+}
+
+my ($numeroEnString) = @ARGV;
+if(not $numeroEnString){
+  print "Escriba el numero : ";
+  $numeroEnString = <>;
+  chomp($numeroEnString);
+}
+
+toNumber($numeroEnString);

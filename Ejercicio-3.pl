@@ -3,32 +3,50 @@ use warnings;
 use JSON;
 use HTTP::Tiny;
 
-my ($city) = @ARGV;
-my $apikey = "apikey";
-# la query
-my $response = HTTP::Tiny->new->get(
+my $apikey = "18e4ba1d71a0d81144b87e1b0c822f28";#"apikey";
+
+sub obtenerTemperatura{
+  my ($city) = @_;
+  my $response = HTTP::Tiny->new->get(
   'http://api.openweathermap.org/data/2.5/weather?q=' . $city . 
   '&units=metric&sort=population&appid='. $apikey);
+  
+  status($response, $city);
 
-## error si no encuenta una cuidad con el nombre o codigo
-if($response->{'status'} == 404){
-  print "No se encontro la ciudad ". $city ." \n" ;
-  exit 42;
+
+  $response = decode_json($response->{'content'});
+  my $dayData = $response->{'main'};
+  my $temp =  $dayData->{'temp'};
+  return $temp;
+} 
+
+sub status{
+  my ($response, $city) = @_;
+  if($response->{'status'} == 404){
+    print "No se encontro la ciudad $city \n" ;
+    exit "status 404";
+  }
 }
-#convierto el json en un hash
-$response = decode_json($response->{'content'});
 
-# daco los datos del hash
-my $weather = $response->{'weather'};
-$weather = $weather->[0];
-$weather = $weather->{'description'};
+my ($primeraCiudad, $segundaCiudad) = @ARGV;
 
-my $dayData = $response->{'main'};
+if(not $primeraCiudad and not $segundaCiudad ){
+  print "Escriba el primera ciudad : ";
+  $primeraCiudad = <>;
+  chomp($primeraCiudad);
+  print "Escriba el segunda ciudad : ";
+  $segundaCiudad = <>;
+  chomp($segundaCiudad);  
+}
 
-my $temp =  $dayData->{'temp'};
-my $humedad= $dayData->{'humidity'};
+my $primeraCiudadTemp = obtenerTemperatura($primeraCiudad);
+my $segundaCiudadTemp = obtenerTemperatura($segundaCiudad);
 
-#imprimo los datos
-print $weather."\n";
-print $temp . "ºc " . $humedad . "% RH \n";
+if ($primeraCiudadTemp > $segundaCiudadTemp){
+  print "en $primeraCiudad ($primeraCiudadTemp ºc) hace mas calor que en $segundaCiudad ($segundaCiudadTemp ºc) \n";
+}else{
+  print "en $segundaCiudad ($segundaCiudadTemp ºc) hace mas calor que en $primeraCiudad ($primeraCiudadTemp ºc) \n";
+
+}
+
 

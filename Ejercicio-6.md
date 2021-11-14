@@ -1,4 +1,7 @@
-
-  Primero testeria algunos cambios de base.
-  Luego testearia errores como ingresar cosas invalidas(bases por encima de lo permitido o negativas. el numero maximo calculable).
-  Tambien que tire los errores correctos(que los errores de arriva responda apromiadamente).
+Para ejercicio 2 testearia: 
+-probar una base invalida menor a 2
+-probar una base invalida mayor a 25
+-probar si la base dada no es un numero entero
+-probar si los numero que me pasan pertenescan a la base dicha
+-probar unas sumas con base mayor a 10
+-probar unas sumas con base menor a 10

@@ -3,26 +3,38 @@ use warnings;
 
 
 my ($filename,$encode) = @ARGV;
-my $data;
+my $data; 
+if(not $filename and not $encode){
+  print "Escriba el nombre del archivo : ";
+  $filename = <>;
+  chomp($filename);
+
+  print "y hay que decifrar o cifrar : ";
+  $encode = <>;
+  chomp($encode);
+}
+
+
 
 $encode = lc($encode);
-
-if($encode eq "cifrar" or $encode eq "descifrar" ){
-  # habre el archivo en modo lectura y lo guarda en un array
+if($encode eq "cifrar" or $encode eq "decifrar" ){
   open($data,'<',$filename) or die $!;
-  # guarda el archivo como un array
-  my @data = <$data>;
-  # habre el archivo en modo escritura y borra los datos 
+  my @archivo = <$data>;
   open($data,'>',$filename) or die $!;
-
-  foreach my $line (@data){
-    #convierte el string en el string cifrado o descrifrado
-    $line =~   tr/A-Za-z/N-ZA-Mn-za-m/;
-    #guarda el string en el archivo
-    print $data $line;
+  my $newLine;
+  
+  for my $linea (@archivo){
+    $newLine = cifrarydecifrar($linea);
+    print $data $newLine;
   }
-  # print "Se a logrado " .$encode . " con exito \n";
   close($data);
 }else{
   print "Error codigo de desifrado ". $encode ." es incorrecto \n";
 }
+
+sub cifrarydecifrar{
+  my ($string) = @_;
+  $string =~ tr/A-Za-z/N-ZA-Mn-za-m/;
+  $string
+}
+
